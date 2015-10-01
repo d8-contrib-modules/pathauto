@@ -706,9 +706,8 @@ function pathauto_taxonomy_term_update_alias(stdClass $term, $op, array $options
 
   if (!empty($options['alias children'])) {
     // For all children generate new aliases.
-    $options['alias children'] = FALSE;
     unset($options['language']);
-    foreach (taxonomy_get_tree($term->vid, $term->tid) as $subterm) {
+    foreach (taxonomy_get_children($term->tid, $term->vid) as $subterm) {
       pathauto_taxonomy_term_update_alias($subterm, $op, $options);
     }
   }

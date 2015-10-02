@@ -12,14 +12,20 @@
  */
 function pathauto_install() {
   // Set some default variables necessary for the module to perform.
-  variable_set('pathauto_node_pattern', 'content/[node:title]');
-  variable_set('pathauto_taxonomy_term_pattern', '[term:vocabulary]/[term:name]');
-  variable_set('pathauto_forum_pattern', '[term:vocabulary]/[term:name]');
-  variable_set('pathauto_user_pattern', 'users/[user:name]');
-  variable_set('pathauto_blog_pattern', 'blogs/[user:name]');
-
-  // Set the default separator character to replace instead of remove (default).
-  variable_set('pathauto_punctuation_hyphen', 1);
+  $defaults = array(
+    'pathauto_node_pattern' => 'content/[node:title]',
+    'pathauto_taxonomy_term_pattern' => '[term:vocabulary]/[term:name]',
+    'pathauto_forum_pattern' => '[term:vocabulary]/[term:name]',
+    'pathauto_user_pattern' => 'users/[user:name]',
+    'pathauto_blog_pattern' => 'blogs/[user:name]',
+    // Set hyphen character to replace instead of remove.
+    'pathauto_punctuation_hyphen' => 1,
+  );
+  foreach ($defaults as $variable => $default) {
+    if (variable_get($variable) === NULL) {
+      variable_set($variable, $default);
+    }
+  }
 
   // Set the weight to 1
   db_update('system')

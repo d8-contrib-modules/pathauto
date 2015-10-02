@@ -454,12 +454,19 @@ function pathauto_is_alias_reserved($alias, $source, $langcode = LANGUAGE_NONE) 
  * Implements hook_pathauto_is_alias_reserved() on behalf of path.module.
  */
 function path_pathauto_is_alias_reserved($alias, $source, $langcode) {
-  return (bool) db_query_range("SELECT pid FROM {url_alias} WHERE source <> :source AND alias = :alias AND language IN (:language, :language_none) ORDER BY language DESC, pid DESC", 0, 1, array(
-    ':source' => $source,
-    ':alias' => $alias,
-    ':language' => $langcode,
-    ':language_none' => LANGUAGE_NONE,
-  ))->fetchField();
+  // For language neutral content, we need to make sure the alias doesn't
+  // collide with any existing aliases. For localized content, just make sure
+  // it doesn't collide with same language or language neutral aliases.
+  $query = db_select('url_alias', 'ua')
+         ->fields('ua', array('pid'))
+         ->condition('source', $source, '<>')
+         ->condition('alias', $alias);
+
+  if ($langcode != LANGUAGE_NONE) {
+    $query->condition('language', array($langcode, LANGUAGE_NONE), 'IN');
+  }
+
+  return $query->execute()->rowCount() > 0;
 }
 
 /**

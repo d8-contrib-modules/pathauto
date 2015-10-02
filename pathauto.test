@@ -753,6 +753,14 @@ class PathautoLocaleTestCase extends PathautoFunctionalTestHelper {
     $this->assertEntityAlias('node', $node, 'content/english-node-0', 'en');
     $this->assertEntityAlias('node', $node, 'french-node', 'fr');
     $this->assertAliasExists(array('pid' => $english_alias['pid'], 'alias' => 'content/english-node-0'));
+
+    // Create a new node with the same title as before but without
+    // specifying a language.
+    $node = $this->drupalCreateNode(array('title' => 'English node'));
+
+    // Check that the new node had a unique alias generated with the '-1'
+    // suffix.
+    $this->assertEntityAlias('node', $node, 'content/english-node-1');
   }
 }
 

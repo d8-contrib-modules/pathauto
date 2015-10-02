@@ -3,6 +3,7 @@ description = Provides a mechanism for modules to automatically generate aliases
 dependencies[] = path
 dependencies[] = token
 core = 7.x
+files[] = pathauto.migrate.inc
 files[] = pathauto.test
 configure = admin/config/search/path/patterns
 recommends[] = redirect

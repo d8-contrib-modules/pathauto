@@ -470,7 +470,7 @@ function pathauto_alias_uniquify(&$alias, $source, $langcode) {
   do {
     // Append an incrementing numeric suffix until we find a unique alias.
     $unique_suffix = $separator . $i;
-    $alias = truncate_utf8($original_alias, $maxlength - drupal_strlen($unique_suffix, TRUE)) . $unique_suffix;
+    $alias = truncate_utf8($original_alias, $maxlength - drupal_strlen($unique_suffix), TRUE) . $unique_suffix;
     $i++;
   } while (pathauto_is_alias_reserved($alias, $source, $langcode));
 }
